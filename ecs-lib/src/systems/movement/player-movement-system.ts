@@ -1,4 +1,4 @@
-import { query, IsA, Not } from "bitecs";
+import { query, IsA, Not, setComponent } from "bitecs";
 import {
   Position,
   Stunned,

@@ -8,7 +8,9 @@ import {
 import {
   createPlayer,
   getWorld,
+  PlayerState,
   Position,
+  PositionState,
   stepWorld,
   TestRoomState,
   type ECSWorld,
@@ -88,7 +90,6 @@ export class BufferedMovesConsumer implements MovementInputBuffer {
 
 export class TestRoom extends Room<{ state: TestRoomState }> {
   private world: ECSWorld;
-
   private clientIdToEntityId = new Map<string, number>();
   private moveInputBuffer: BufferedMovesConsumer;
   private engine: BABYLON.Engine;
@@ -164,7 +165,10 @@ export class TestRoom extends Room<{ state: TestRoomState }> {
     };
     this.world.externalDeps.moveBuffer = this.moveInputBuffer;
     this.state = new TestRoomState();
+    this.observeECSUpdates();
+  }
 
+  observeECSUpdates() {
     observe(this.world, onSet(Position), (eid, params) => {
       const { x, y, z } = params;
       console.log(`TICK ${this.world.time.tick} x=${x} y=${y} z=${z}`);
