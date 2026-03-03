@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "@codecompose/typescript-config/shared-library",
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "useDefineForClassFields": false,
+    "composite": true,
+    "paths": {
+      "~/*": ["./src/*"],
+    },
+  },
+}

@@ -1,0 +1,36 @@
+{
+  "name": "ecs-lib",
+  "author": "Martin Grünbaum <martin@itsolveonline.net>",
+  "private": true,
+  "version": "0.0.2",
+  "type": "module",
+  "main": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "lint": "eslint",
+    "lint:fix": "eslint --fix"
+  },
+  "devDependencies": {
+    "@codecompose/typescript-config": "^2.3.0",
+    "tsdown": "^0.20.3",
+    "typescript": "~5.9.3"
+  },
+  "peerDependencies": {
+    "@babylonjs/core": "^8.53.0",
+    "@babylonjs/inspector": "^8.53.0",
+    "@colyseus/sdk": "^0.17.34"
+  },
+  "dependencies": {
+    "bitecs": "^0.4.0"
+  }
+}
