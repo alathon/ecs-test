@@ -84,6 +84,9 @@ export class Game {
 
   private observeECSUpdates() {
     observe(this.world, onSet(Position), (eid: number, params) => {
+      console.log(
+        `TICK ${this.world.time.tick} x=${params.x} y=${params.y} z=${params.z}`,
+      );
       this.entities.get(eid)?.targetPosition.set(params.x, params.y, params.z);
     });
 

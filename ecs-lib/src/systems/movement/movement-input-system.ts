@@ -6,11 +6,15 @@ import {
 } from "~/components";
 import { type ECSWorld } from "~/world";
 
+export interface MoveInput {
+  jumping: boolean;
+  moveX: number;
+  moveY: number;
+  moveZ: number;
+}
+
 export interface MovementInputBuffer {
-  getInput(
-    eid: number,
-    tick: number,
-  ): { jumping: boolean; moveX: number; moveY: number; moveZ: number };
+  getInput(eid: number, tick: number): MoveInput;
 }
 
 export function movementInputSystem(world: ECSWorld) {
