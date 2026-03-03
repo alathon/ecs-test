@@ -1,4 +1,6 @@
 import { observe, onSet } from "bitecs";
+import { FakeMoveInputBuffer } from "./fake-input-buffer";
+
 import * as BABYLON from "@babylonjs/core";
 
 import {
@@ -13,33 +15,6 @@ import {
 import { DomInputManager } from "./dom-input-manager";
 
 const TICK_MS = 1000 / 60;
-
-class FakeMoveInputBuffer implements MovementInputBuffer {
-  private playerMovement: {
-    jumping: boolean;
-    moveX: number;
-    moveY: number;
-    moveZ: number;
-  } = {
-    jumping: false,
-    moveX: 0,
-    moveY: 0,
-    moveZ: 0,
-  };
-
-  bufferMovement(dim: DomInputManager) {
-    const moveVector = dim.getMovementDirection();
-    const jumping = dim.getJumping();
-    this.playerMovement.jumping = jumping;
-    this.playerMovement.moveX = moveVector.x;
-    this.playerMovement.moveY = moveVector.y;
-    this.playerMovement.moveZ = moveVector.z;
-  }
-
-  getInput(_tick: number, _eid: number) {
-    return this.playerMovement;
-  }
-}
 
 interface Entity {
   targetPosition: BABYLON.Vector3;

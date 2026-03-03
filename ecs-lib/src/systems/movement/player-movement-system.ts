@@ -25,13 +25,17 @@ export const playerMovementSystem = (world: ECSWorld) => {
 
     // Set collisionProbe to current position.
     collisionProbe.position.set(
-      Position.x[eid]!,
-      Position.y[eid]!,
-      Position.z[eid]!,
+      Position.x[eid] ?? 0,
+      Position.y[eid] ?? 0,
+      Position.z[eid] ?? 0,
     );
 
     if (moveX[eid] != 0 || moveZ[eid] != 0) {
-      movementXZ.set(moveX[eid]! * deltaSeconds, 0, moveZ[eid]! * deltaSeconds);
+      movementXZ.set(
+        moveX[eid] ?? 0 * deltaSeconds,
+        0,
+        moveZ[eid] ?? 0 * deltaSeconds,
+      );
     }
     if (moveY[eid] != 0) {
       movementY.set(0, pressedJump ? 1 : 0, 0);

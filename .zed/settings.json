@@ -1,0 +1,18 @@
+{
+  "terminal": {
+    "env": {
+      "GIT_EDITOR": "zed --wait",
+    },
+  },
+  "languages": {
+    "TypeScript": {
+      "language_servers": ["typescript_language_server", "!vtsls", "..."],
+    },
+    "TSX": {
+      "language_servers": ["typescript_language_server", "!vtsls", "..."],
+    },
+    "JavaScript": {
+      "language_servers": ["typescript_language_server", "!vtsls", "..."],
+    },
+  },
+}
