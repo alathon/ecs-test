@@ -93,13 +93,13 @@ export const MovementInputDataComponent: DataComponentAdapter<
   component: MovementInput,
   name: "MovementInput",
   set: (eid, params) => {
-    MovementInput.jumping[eid] = params.jumping ? 1 : 0;
+    MovementInput.jumping[eid] = params.jumping;
     MovementInput.moveX[eid] = params.moveX;
     MovementInput.moveY[eid] = params.moveY;
     MovementInput.moveZ[eid] = params.moveZ;
   },
   get: (eid) => ({
-    jumping: MovementInput.jumping[eid] === 1,
+    jumping: MovementInput.jumping[eid],
     moveX: MovementInput.moveX[eid],
     moveY: MovementInput.moveY[eid],
     moveZ: MovementInput.moveZ[eid],

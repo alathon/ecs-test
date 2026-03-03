@@ -27,5 +27,7 @@ export function movementInputSystem(world: ECSWorld) {
       moveY: input.moveY,
       moveZ: input.moveZ,
     });
+
+    // if entity
   }
 }

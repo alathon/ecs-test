@@ -23,41 +23,41 @@ export const Movement: Movement = {
 };
 
 export type MovementInput = {
-  moveX: Float64Array;
-  moveY: Float64Array;
-  moveZ: Float64Array;
-  jumping: Uint8Array;
+  moveX: number[];
+  moveY: number[];
+  moveZ: number[];
+  jumping: boolean[];
 };
 
 export const MovementInput: MovementInput = {
-  moveX: new Float64Array(MAX_PLAYERS),
-  moveY: new Float64Array(MAX_PLAYERS),
-  moveZ: new Float64Array(MAX_PLAYERS),
-  jumping: new Uint8Array(MAX_PLAYERS),
+  moveX: Array(MAX_PLAYERS).fill(0),
+  moveY: Array(MAX_PLAYERS).fill(0),
+  moveZ: Array(MAX_PLAYERS).fill(0),
+  jumping: Array(MAX_PLAYERS).fill(false),
 };
 
 export type Position = {
-  x: Float64Array;
-  y: Float64Array;
-  z: Float64Array;
+  x: number[];
+  y: number[];
+  z: number[];
 };
 
 export const Position: Position = {
-  x: new Float64Array(MAX_ENTITIES),
-  y: new Float64Array(MAX_ENTITIES),
-  z: new Float64Array(MAX_ENTITIES),
+  x: Array(MAX_ENTITIES).fill(0),
+  y: Array(MAX_ENTITIES).fill(0),
+  z: Array(MAX_ENTITIES).fill(0),
 };
 
 export type Velocity = {
-  x: Float64Array;
-  y: Float64Array;
-  z: Float64Array;
+  x: number[];
+  y: number[];
+  z: number[];
 };
 
 export const Velocity: Velocity = {
-  x: new Float64Array(MAX_ENTITIES),
-  y: new Float64Array(MAX_ENTITIES),
-  z: new Float64Array(MAX_ENTITIES),
+  x: Array(MAX_ENTITIES).fill(0),
+  y: Array(MAX_ENTITIES).fill(0),
+  z: Array(MAX_ENTITIES).fill(0),
 };
 
 export type Vitals = {

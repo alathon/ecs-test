@@ -1,6 +1,6 @@
 import { observe, onSet } from "bitecs";
-import { FakeMoveInputBuffer } from "./fake-input-buffer";
-
+import { FakeMoveInputBuffer, MovementIntent } from "./fake-input-buffer";
+import { TestRoomState } from "ecs-lib";
 import * as BABYLON from "@babylonjs/core";
 
 import {
@@ -13,6 +13,7 @@ import {
 } from "ecs-lib";
 
 import { DomInputManager } from "./dom-input-manager";
+import { ColyseusSDK, Room } from "@colyseus/sdk";
 
 const TICK_MS = 50;
 
@@ -31,12 +32,15 @@ export class Game {
   public camera: BABYLON.Camera;
   public inputManager: DomInputManager;
   public moveInputBuffer: FakeMoveInputBuffer;
+  public client: ColyseusSDK;
+  public room?: Room<any, TestRoomState>;
 
   constructor(scene: BABYLON.Scene, camera: BABYLON.Camera) {
     this.scene = scene;
     this.camera = camera;
     this.world = getWorld();
     this.moveInputBuffer = new FakeMoveInputBuffer();
+
     this.inputManager = new DomInputManager();
     this.inputManager.initialize(this.scene);
     this.world.externalDeps.babylon = { scene, camera };
@@ -51,7 +55,31 @@ export class Game {
       targetPosition: new BABYLON.Vector3(0, 0, 0),
     });
 
+    const serverUrl = "ws://localhost:2567";
+    this.client = new ColyseusSDK(serverUrl);
     this.observeECSUpdates();
+
+    this.moveInputBuffer.onMovementIntent(this.onMovementIntent.bind(this));
+  }
+
+  private onMovementIntent(intent: MovementIntent): void {
+    //console.log(`onMovementIntent tick ${this.world.time.tick}`);
+    // Send to server.
+    if (!this.world) return;
+    const tick = this.world.time.tick;
+    const msg = { moveIntent: intent, simTick: tick };
+    //console.log(`Sending move: ${JSON.stringify(msg)}`);
+    this.room?.send("move", msg);
+  }
+
+  public async connect(): Promise<boolean> {
+    try {
+      this.room = await this.client.joinOrCreate("test", {}, TestRoomState);
+      console.log(`Connected to test room`);
+      return true;
+    } catch (err) {
+      return false;
+    }
   }
 
   private observeECSUpdates() {

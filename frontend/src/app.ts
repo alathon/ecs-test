@@ -71,6 +71,15 @@ class App {
       this._engine.resize();
     });
   }
+
+  public connect() {
+    return this._game.connect();
+  }
 }
 
-new App();
+const gogoGadget = async () => {
+  const app = new App();
+  await app.connect();
+};
+
+gogoGadget();

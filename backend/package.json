@@ -1,0 +1,31 @@
+{
+  "name": "backend",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "main": "dist/index.mjs",
+  "scripts": {
+    "check-types": "tsc --noEmit",
+    "build": "tsdown",
+    "start": "node --enable-source-maps dist/index.mjs",
+    "dev": "tsdown --watch --onSuccess \"node --enable-source-maps dist/index.mjs\""
+  },
+  "devDependencies": {
+    "@codecompose/typescript-config": "^2.2.0",
+    "@types/node": "^25.3.3",
+    "tsdown": "^0.20.3",
+    "typescript": "~5.9.3"
+  },
+  "dependencies": {
+    "@babylonjs/core": "^8.53.0",
+    "@babylonjs/inspector": "^8.53.0",
+    "@colyseus/core": "^0.17.39",
+    "@colyseus/schema": "^4.0.15",
+    "@colyseus/sdk": "^0.17.34",
+    "@colyseus/tools": "^0.17.19",
+    "@colyseus/ws-transport": "^0.17.9",
+    "bitecs": "^0.4.0",
+    "express": "^5.2.1",
+    "zod": "^4.3.6"
+  }
+}

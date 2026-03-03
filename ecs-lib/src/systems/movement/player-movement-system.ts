@@ -14,7 +14,7 @@ export const playerMovementSystem = (world: ECSWorld) => {
 
   for (const eid of query(world, [IsA(world.prefabs.Player), Not(Stunned)])) {
     const { moveX, moveY, moveZ, jumping } = MovementInput;
-    const pressedJump = jumping[eid] === 1;
+    const pressedJump = jumping[eid];
 
     // Ignore if we aren't moving.
     if (moveX[eid] == 0 && moveY[eid] == 0 && moveZ[eid] == 0 && !pressedJump)
