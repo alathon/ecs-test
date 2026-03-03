@@ -14,12 +14,12 @@ export const playerMovementSystem = (world: ECSWorld) => {
 
   for (const eid of query(world, [IsA(world.prefabs.Player), Not(Stunned)])) {
     const { moveX, moveY, moveZ, jumping } = MovementInput;
+    const pressedJump = jumping[eid] === 1;
 
     // Ignore if we aren't moving.
-    if (moveX[eid] == 0 && moveY[eid] == 0 && moveZ[eid] == 0 && !jumping[eid])
+    if (moveX[eid] == 0 && moveY[eid] == 0 && moveZ[eid] == 0 && !pressedJump)
       continue;
 
-    const pressedJump = jumping[eid];
     const collisionProbe = Movement.collisionProbe[eid];
     const movementXZ = Movement.movementXZ[eid];
     const movementY = Movement.movementY[eid];
@@ -32,17 +32,13 @@ export const playerMovementSystem = (world: ECSWorld) => {
 
     // Set collisionProbe to current position.
     collisionProbe.position.set(
-      Position.x[eid] ?? 0,
-      Position.y[eid] ?? 0,
-      Position.z[eid] ?? 0,
+      Position.x[eid],
+      Position.y[eid],
+      Position.z[eid],
     );
 
     if (moveX[eid] != 0 || moveZ[eid] != 0) {
-      movementXZ.set(
-        (moveX[eid] ?? 0) * deltaSeconds,
-        0,
-        (moveZ[eid] ?? 0) * deltaSeconds,
-      );
+      movementXZ.set(moveX[eid] * deltaSeconds, 0, moveZ[eid] * deltaSeconds);
     }
     if (moveY[eid] != 0) {
       movementY.set(0, pressedJump ? 1 : 0, 0);

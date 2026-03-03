@@ -5,6 +5,7 @@
     "experimentalDecorators": true,
     "useDefineForClassFields": false,
     "composite": true,
+    "noUncheckedIndexedAccess": false,
     "paths": {
       "~/*": ["./src/*"],
     },
