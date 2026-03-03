@@ -9,6 +9,5 @@ export const timeSystem = (
   time.delta = deltaTimeMs;
   time.deltaSeconds = deltaTimeMs / 1000;
   time.then = now;
-  time.elapsed += deltaTimeMs;
   time.tick = tick;
 };

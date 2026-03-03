@@ -1,5 +1,9 @@
 import { query } from "bitecs";
-import { MovementInput } from "~/components";
+import {
+  MovementInput,
+  MovementInputDataComponent,
+  safeSetComponent,
+} from "~/components";
 import { type ECSWorld } from "~/world";
 
 export interface MovementInputBuffer {
@@ -17,9 +21,11 @@ export function movementInputSystem(world: ECSWorld) {
 
   for (const eid of query(world, [MovementInput])) {
     const input = world.externalDeps.moveBuffer.getInput(eid, world.time.tick);
-    MovementInput.jumping[eid] = input.jumping;
-    MovementInput.moveX[eid] = input.moveX;
-    MovementInput.moveY[eid] = input.moveY;
-    MovementInput.moveZ[eid] = input.moveZ;
+    safeSetComponent(world, eid, MovementInputDataComponent, {
+      jumping: input.jumping,
+      moveX: input.moveX,
+      moveY: input.moveY,
+      moveZ: input.moveZ,
+    });
   }
 }

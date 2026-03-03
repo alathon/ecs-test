@@ -1,27 +1,114 @@
-import { observe, onSet, onGet } from "bitecs";
-import { Position, Velocity } from "./components";
+import { observe, onSet, onGet, setComponent } from "bitecs";
+import { MovementInput, Position, Velocity } from "./components";
 import { type ECSWorld } from "~/world";
 
-const _createVectorObserver = (
-  world: ECSWorld,
-  component: { x: number[]; y: number[]; z: number[] },
-) => {
-  observe(world, onSet(component), (eid, params) => {
-    component.x[eid] = params.x;
-    component.y[eid] = params.y;
-    component.z[eid] = params.z;
-  });
+type ComponentRef = object;
 
-  observe(world, onGet(component), (eid) => ({
-    x: component.x[eid],
-    y: component.y[eid],
-    z: component.z[eid],
-  }));
+export type DataComponentAdapter<TSet, TGet = TSet> = {
+  component: ComponentRef;
+  name: string;
+  set: (eid: number, params: TSet) => void;
+  get: (eid: number) => TGet;
 };
 
-// TODO: A bit unfortunate that this is disjointed from the components, and that you need to remember to do this and there
-// isn't any compile-time safety for it!
+const writableComponentsByWorld = new WeakMap<ECSWorld, Set<ComponentRef>>();
+
+const getWritableSet = (world: ECSWorld): Set<ComponentRef> => {
+  let writable = writableComponentsByWorld.get(world);
+  if (!writable) {
+    writable = new Set<ComponentRef>();
+    writableComponentsByWorld.set(world, writable);
+  }
+
+  return writable;
+};
+
+export const registerDataComponent = <TSet, TGet = TSet>(
+  world: ECSWorld,
+  adapter: DataComponentAdapter<TSet, TGet>,
+): void => {
+  observe(world, onSet(adapter.component), (eid, params) => {
+    adapter.set(eid, params as TSet);
+  });
+
+  observe(world, onGet(adapter.component), (eid) => adapter.get(eid));
+  getWritableSet(world).add(adapter.component);
+};
+
+export const safeSetComponent = <TSet, TGet = TSet>(
+  world: ECSWorld,
+  eid: number,
+  adapter: DataComponentAdapter<TSet, TGet>,
+  data: TSet,
+): void => {
+  if (!getWritableSet(world).has(adapter.component)) {
+    throw new Error(
+      `Component "${adapter.name}" is not registered for setComponent() writes. Register it with registerDataComponent() before calling safeSetComponent().`,
+    );
+  }
+
+  setComponent(world, eid, adapter.component, data);
+};
+
+export const VelocityDataComponent: DataComponentAdapter<
+  { x: number; y: number; z: number },
+  { x?: number; y?: number; z?: number }
+> = {
+  component: Velocity,
+  name: "Velocity",
+  set: (eid, params) => {
+    Velocity.x[eid] = params.x;
+    Velocity.y[eid] = params.y;
+    Velocity.z[eid] = params.z;
+  },
+  get: (eid) => ({
+    x: Velocity.x[eid],
+    y: Velocity.y[eid],
+    z: Velocity.z[eid],
+  }),
+};
+
+export const PositionDataComponent: DataComponentAdapter<
+  { x: number; y: number; z: number },
+  { x?: number; y?: number; z?: number }
+> = {
+  component: Position,
+  name: "Position",
+  set: (eid, params) => {
+    Position.x[eid] = params.x;
+    Position.y[eid] = params.y;
+    Position.z[eid] = params.z;
+  },
+  get: (eid) => ({
+    x: Position.x[eid],
+    y: Position.y[eid],
+    z: Position.z[eid],
+  }),
+};
+
+export const MovementInputDataComponent: DataComponentAdapter<
+  { jumping: boolean; moveX: number; moveY: number; moveZ: number },
+  { jumping?: boolean; moveX?: number; moveY?: number; moveZ?: number }
+> = {
+  component: MovementInput,
+  name: "MovementInput",
+  set: (eid, params) => {
+    MovementInput.jumping[eid] = params.jumping;
+    MovementInput.moveX[eid] = params.moveX;
+    MovementInput.moveY[eid] = params.moveY;
+    MovementInput.moveZ[eid] = params.moveZ;
+  },
+  get: (eid) => ({
+    jumping: MovementInput.jumping[eid],
+    moveX: MovementInput.moveX[eid],
+    moveY: MovementInput.moveY[eid],
+    moveZ: MovementInput.moveZ[eid],
+  }),
+};
+
+// TODO: Still disjointed from component declarations; the helper now centralizes registration and runtime checks.
 export const createDefaultComponentObservers = (world: ECSWorld): void => {
-  _createVectorObserver(world, Velocity);
-  _createVectorObserver(world, Position);
+  registerDataComponent(world, VelocityDataComponent);
+  registerDataComponent(world, PositionDataComponent);
+  registerDataComponent(world, MovementInputDataComponent);
 };

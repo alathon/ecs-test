@@ -4,17 +4,17 @@ import { FakeMoveInputBuffer } from "./fake-input-buffer";
 import * as BABYLON from "@babylonjs/core";
 
 import {
-  MovementInputBuffer,
   Position,
   stepWorld,
   createPlayer,
   getWorld,
   type ECSWorld,
+  MovementInput,
 } from "ecs-lib";
 
 import { DomInputManager } from "./dom-input-manager";
 
-const TICK_MS = 1000 / 60;
+const TICK_MS = 50;
 
 interface Entity {
   targetPosition: BABYLON.Vector3;
@@ -55,9 +55,16 @@ export class Game {
   }
 
   private observeECSUpdates() {
-    observe(this.world, onSet(Position), (eid, params) => {
+    observe(this.world, onSet(Position), (eid: number, params) => {
       this.entities.get(eid)?.targetPosition.set(params.x, params.y, params.z);
     });
+
+    // observe(this.world, onSet(MovementInput), (eid: number, params) => {
+    //   console.log(
+    //     `TODO: Add unACK'ed move for entity ${eid}: ${JSON.stringify(params)}`,
+    //   );
+    //   console.log(`Current world tick: ` + this.world.time.tick);
+    // });
   }
 
   public fixedTick(deltaTimeMs: number, now: number) {
@@ -85,17 +92,17 @@ export class Game {
 
     // Lerp entities towards their target position.
     for (const entity of this.entities.values()) {
-      const lerpFactor = deltaTimeMs / TICK_MS;
       if (
         entity.mesh.position.equalsWithEpsilon(entity.targetPosition, 0.001)
       ) {
         continue;
       }
 
+      const alpha = Math.min(1, this.elapsedMs / TICK_MS);
       entity.mesh.position = BABYLON.Vector3.Lerp(
         entity.mesh.position,
         entity.targetPosition,
-        lerpFactor,
+        alpha,
       );
     }
 

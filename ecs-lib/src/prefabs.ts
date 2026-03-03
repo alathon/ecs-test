@@ -22,7 +22,7 @@ export const createDefaultPrefabs = (world: ECSWorld) => {
 
   const Player = addPrefab(world);
   addComponent(world, Player, IsA(Mob));
-  addComponent(world, Mob, MovementInput);
+  addComponent(world, Player, MovementInput);
   addComponent(world, Player, Movement);
 
   const NPC = addPrefab(world);

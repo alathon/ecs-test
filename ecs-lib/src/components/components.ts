@@ -77,7 +77,6 @@ export const Stunned = {};
 export type Time = {
   delta: number;
   deltaSeconds: number;
-  elapsed: number;
   then: number;
   tick: number;
 };
@@ -85,7 +84,6 @@ export type Time = {
 export const Time: Time = {
   delta: 0,
   deltaSeconds: 0,
-  elapsed: 0,
   then: Date.now(),
   tick: 0,
 };

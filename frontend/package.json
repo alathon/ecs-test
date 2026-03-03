@@ -16,7 +16,6 @@
     "@babylonjs/core": "^8.53.0",
     "@babylonjs/inspector": "^8.53.0",
     "@colyseus/sdk": "^0.17.34",
-    "bitecs": "^0.4.0",
-    "ecs-lib": "file:../ecs-lib"
+    "bitecs": "^0.4.0"
   }
 }

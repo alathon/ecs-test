@@ -23,7 +23,7 @@ export class FakeMoveInputBuffer implements MovementInputBuffer {
     this.playerMovement.moveZ = moveVector.z;
   }
 
-  getInput(_tick: number, _eid: number) {
+  getInput(_eid: number, _tick: number) {
     return this.playerMovement;
   }
 }

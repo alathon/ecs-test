@@ -1,5 +1,12 @@
-import { query, IsA, Not, setComponent } from "bitecs";
-import { Position, Stunned, MovementInput, Movement } from "~/components";
+import { query, IsA, Not } from "bitecs";
+import {
+  Position,
+  Stunned,
+  MovementInput,
+  Movement,
+  PositionDataComponent,
+  safeSetComponent,
+} from "~/components";
 import { type ECSWorld } from "~/world";
 
 export const playerMovementSystem = (world: ECSWorld) => {
@@ -32,9 +39,9 @@ export const playerMovementSystem = (world: ECSWorld) => {
 
     if (moveX[eid] != 0 || moveZ[eid] != 0) {
       movementXZ.set(
-        moveX[eid] ?? 0 * deltaSeconds,
+        (moveX[eid] ?? 0) * deltaSeconds,
         0,
-        moveZ[eid] ?? 0 * deltaSeconds,
+        (moveZ[eid] ?? 0) * deltaSeconds,
       );
     }
     if (moveY[eid] != 0) {
@@ -63,7 +70,7 @@ export const playerMovementSystem = (world: ECSWorld) => {
       );
     }
 
-    setComponent(world, eid, Position, {
+    safeSetComponent(world, eid, PositionDataComponent, {
       x: collisionProbe.position.x,
       y: collisionProbe.position.y,
       z: collisionProbe.position.z,

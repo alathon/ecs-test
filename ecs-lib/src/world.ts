@@ -10,7 +10,6 @@ const context: ECSWorld = {
     delta: 0,
     deltaSeconds: 0,
     then: Date.now(),
-    elapsed: 0,
     tick: 0,
   },
   prefabs: {
